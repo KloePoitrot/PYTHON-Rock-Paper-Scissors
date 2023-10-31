@@ -36,15 +36,41 @@ def play(user_choice):
         comp_score_var.set(comp_score_var.get() + 1)
 
 
-
     # Charger les images
     user_img_label.config(image=get_image(user_choice))
     computer_img_label.config(image=get_image(computer))
 
-    # Ajouter les choix a l'historique (du plus racent au plus anciens)
+    # Ajouter les choix a l'historique (du plus récent au plus anciens)
     history_listbox.insert(0, f"Vous: {user_choice} - Ordi: {computer}")
 
     final_score()
+
+
+# Afficher une image en fonction du choix
+def get_image(choice):
+    if choice == "Pierre":
+        return pierre_png
+    elif choice == "Feuille":
+        return feuille_png
+    else:
+        return ciseaux_png 
+    
+# Liaison des boutons au touche du clavier
+def key_press(e):
+    # Si joueur < 10 ET computer < 10
+    if player_score_var.get() < 10 and comp_score_var.get() < 10:
+        if e.char.lower() == "p":
+            play("Pierre")
+        elif e.char.lower() == "f":
+            play("Feuille")
+        elif e.char.lower() == "c":
+            play("Ciseaux")
+
+fenetre.bind('<Key>', key_press)
+
+
+
+
 
 
 # Permet de determiner un gagnant et de stopper la partie
@@ -65,38 +91,13 @@ def final_score():
         paper_button.config(state=tk.DISABLED)
         scissor_button.config(state=tk.DISABLED)
 
-
-# Afficher une image en fonction du choix
-def get_image(choice):
-    if choice == "Pierre":
-        return pierre_png
-    elif choice == "Feuille":
-        return feuille_png
-    else:
-        return ciseaux_png 
-    
-
-
-
-# Liaison des boutons au touche du clavier
-def key_press(e):
-    # Si joueur < 10 ET computer < 10
-    if player_score_var.get() < 10 and comp_score_var.get() < 10:
-        if e.char.lower() == "p":
-            play("Pierre")
-        elif e.char.lower() == "f":
-            play("Feuille")
-        elif e.char.lower() == "c":
-            play("Ciseaux")
-
-fenetre.bind('<Key>', key_press)
-
-
-
 # Définition des variables
 result_var = tk.StringVar()
 player_score_var = tk.IntVar()
 comp_score_var = tk.IntVar()
+
+
+
 
 
 # Charger les images
@@ -107,25 +108,19 @@ chargement_png = ImageTk.PhotoImage(Image.open("./images/chargement.png"))
 victoire_gif = ImageTk.PhotoImage(Image.open("./images/victoire.png"))
 defaite_gif = ImageTk.PhotoImage(Image.open("./images/defaite.png"))
 
-
-
-
-
-
-
 # Création des widget avec les images
 titre = tk.Label(fenetre, text="SHI, FU, MI", font=("arial", 30))
 titre.place(x=80, y=10)
 user_label = tk.Label(fenetre, text="Choisissez")
 user_label.place(x=153, y=240)
 
-rock_button = tk.Button(fenetre, image=pierre_png, command=lambda : play("Pierre")) # lambda transmet le paramettre
+rock_button = tk.Button(fenetre, image=pierre_png, command=lambda : play("Pierre"))
 rock_button.place(x=10, y=260)
 
-paper_button = tk.Button(fenetre, image=feuille_png, command=lambda : play("Feuille")) # lambda transmet le paramettre
+paper_button = tk.Button(fenetre, image=feuille_png, command=lambda : play("Feuille"))
 paper_button.place(x=130, y=290)
 
-scissor_button = tk.Button(fenetre, image=ciseaux_png, command=lambda : play("Ciseaux")) # lambda transmet le paramettre
+scissor_button = tk.Button(fenetre, image=ciseaux_png, command=lambda : play("Ciseaux"))
 scissor_button.place(x=250, y=260)
 
 
@@ -171,6 +166,30 @@ img_victoire = tk.Label(fenetre, image=chargement_png)
 img_victoire.place(x=410, y=75)
 victoire = tk.Label(fenetre, text="Jeu en cours...", font=("arial", 18))
 victoire.place(x=380, y=40)
+
+
+def recommencer():
+    if player_score_var.get() > 0 or comp_score_var.get() > 0:
+        rock_button.config(state=tk.ACTIVE)
+        paper_button.config(state=tk.ACTIVE)
+        scissor_button.config(state=tk.ACTIVE)
+
+        
+        player_score_var.set(0)
+        comp_score_var.set(0)
+
+        history_listbox.insert(0, f"==================================")
+        history_listbox.insert(0, f"----------------------------------")
+        history_listbox.insert(0, f"          NOUVELLE PARTIE")
+        history_listbox.insert(0, f"----------------------------------")
+        history_listbox.insert(0, f"==================================")
+
+
+
+# Bouton redémarrer
+restart = tk.Button(fenetre, text="Recommencer", command=recommencer)
+restart.place(x=150, y=65)
+
 
 
 
