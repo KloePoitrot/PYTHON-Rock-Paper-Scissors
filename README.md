@@ -11,7 +11,6 @@ Les image ont été créer par mes soins, vous êtes libre de les réutiliser po
 ## Améliorations 
 ### Prévues:
 * Ajout d'illustrations
-* Reorganisation/retouches du code
 
 ### Potentielles:
 * Enregistrement de l'historique des coups
